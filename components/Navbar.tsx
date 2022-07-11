@@ -17,7 +17,7 @@ const Navbar = () => {
 	const { userProfile, addUser, removeUser } = useAuthStore();
 
 	return (
-		<div className='w-full flex justify-between items-center border-b-2 border-gray-200 py-2 px-4'>
+		<div className='w-full flex justify-between items-center border-b border-gray-200 py-2 px-4'>
 			<Link href='/'>
 				<div className='w-[100] md:w-[130px]'>
 					<Image
@@ -56,7 +56,7 @@ const Navbar = () => {
 						)}
 						<button
 							type='button'
-							className='px-2 hover:shadow-md'
+							className='px-2'
 							onClick={() => {
 								googleLogout();
 								removeUser();
