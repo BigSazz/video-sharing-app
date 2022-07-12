@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import { CircleWavyCheck, UserPlus } from 'phosphor-react';
 import useAuthStore from '../store/authStore';
 import NoResults from './NoResults';
+import { IUser } from '../types';
 
 interface IProps {
 	isPostingComment: boolean,
@@ -23,7 +24,7 @@ interface IComment {
 
 const Comments = ({ comment, comments, isPostingComment, addComment, setComment }: IProps) => {
 	const router = useRouter();
-	const { userProfile } = useAuthStore();
+	const { userProfile, allUsers } = useAuthStore();
 
 	console.log("COMMENTS=========>", comments);
 
@@ -31,7 +32,42 @@ const Comments = ({ comment, comments, isPostingComment, addComment, setComment 
 		<div className='border-y border-gray-200 pt-4 px-10 bg-[#F8F8F8] lg:pb-0 pb-[100px]'>
 			<div className='overflow-scroll lg:h-[475px]'>
 				{comments?.length ? (
-					<div>videos</div>
+					comments.map((comment: IComment, idx) => (
+						<>
+							{allUsers.map((user: IUser) => (
+								user?._id === (comment?.postedBy?._id || comment?.postedBy?._ref) && (
+									<div key={idx} className='p-2 items-center'>
+										<Link key={idx} href={`/profile/${user?._id}`}>
+											<div className='flex items-center gap-3 cursor-pointer'>
+												<div className='w-8 h-8'>
+													<Image
+														src={user?.image}
+														alt='profile image'
+														height={36}
+														width={36}
+														className='rounded-full'
+														layout='responsive'
+													/>
+												</div>
+												<div className='block'>
+													<p className='flex justify-center items-center font-bold text-primary lowercase'>
+														{user?.userName.replaceAll(' ', '')}
+														<CircleWavyCheck className='ml-1 text-blue-400 text-md' weight='fill' />
+													</p>
+													<p className='capitalize text-gray-400 text-xs'>
+														{user?.userName}
+													</p>
+												</div>
+											</div>
+										</Link>
+										<div className='pl-12 mt-2'>
+											<p>{comment?.comment}</p>
+										</div>
+									</div>
+								)
+							))}
+						</>
+					))
 				) : (
 					<NoResults text={'No comments yet!'} />
 				)}
